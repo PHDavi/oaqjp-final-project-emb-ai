@@ -1,5 +1,7 @@
 """Emotion detection using the IBM Skills Network Watson NLP endpoint."""
 
+import json
+
 import requests
 
 WATSON_URL = (
@@ -30,7 +32,7 @@ def emotion_detector(text_to_analyze):
         return _empty_result()
     response.raise_for_status()
 
-    scores = response.json()["emotionPredictions"][0]["emotion"]
+    scores = json.loads(response.text)["emotionPredictions"][0]["emotion"]
     result = {name: scores[name] for name in EMOTIONS}
     result["dominant_emotion"] = max(EMOTIONS, key=result.get)
     return result
