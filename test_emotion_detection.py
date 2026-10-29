@@ -1,5 +1,6 @@
 """Unit tests for Watson NLP emotion detection."""
 
+import json
 import unittest
 from unittest.mock import Mock, patch
 
@@ -20,9 +21,7 @@ class TestEmotionDetector(unittest.TestCase):
                 scores[emotion] = 0.8
                 mock_post.return_value = Mock(
                     status_code=200,
-                    **{"json.return_value": {
-                        "emotionPredictions": [{"emotion": scores}]
-                    }},
+                    text=json.dumps({"emotionPredictions": [{"emotion": scores}]}),
                 )
                 result = emotion_detector(f"Example of {emotion}")
                 self.assertEqual(result["dominant_emotion"], emotion)
